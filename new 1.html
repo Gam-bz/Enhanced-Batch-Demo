@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enhanced Batch Processing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 20px;
+      background: green;
+      margin-top: 10px;
+      transition: width 1s;
+    }
+    #progress-container {
+      width: 100%;
+      background: lightgray;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Enhanced Batch Processing Demo</h2>
+<p>Enter batch size and add tasks. When they reach the limit, they will all process together.</p>
+
+<label>Batch Size: </label>
+<input type="number" id="batchInput" value="5">
+<button onclick="setBatchSize()">Set Batch Size</button>
+
+<br><br>
+
+<div id="tasks"></div>
+<button onclick="addTask()">Add Task</button>
+<button onclick="autoAddTasks()">Auto Add 5 Tasks</button>
+
+<div id="progress-container">
+  <div id="progress-bar" class="progress-bar"></div>
+</div>
+
+<p id="log"></p>
+
+<script>
+let tasks = [];
+let batchSize = 5;
+let batchCount = 0;
+
+function setBatchSize() {
+  batchSize = parseInt(document.getElementById("batchInput").value);
+  alert("Batch size set to " + batchSize);
+}
+
+function addTask() {
+  tasks.push("Task " + (tasks.length + 1));
+  updateTaskDisplay();
+
+  if (tasks.length === batchSize) {
+    processBatch();
+  }
+}
+
+function autoAddTasks() {
+  for (let i = 0; i < 5; i++) {
+    addTask();
+  }
+}
+
+function updateTaskDisplay() {
+  document.getElementById("tasks").innerHTML =
+    "Current tasks: " + tasks.join(", ");
+}
+
+function processBatch() {
+  batchCount++;
+  document.getElementById("log").innerHTML += "<br>Processing batch " + batchCount + "...";
+
+  // Show progress animation
+  document.getElementById("progress-bar").style.width = "100%";
+
+  setTimeout(() => {
+    document.getElementById("log").innerHTML +=
+      "<br>Batch " + batchCount + " completed: " + tasks.join(", ");
+
+    tasks = [];
+    updateTaskDisplay();
+    document.getElementById("tasks").innerHTML = "All tasks processed. Ready for new batch.";
+
+    // Reset progress bar
+    document.getElementById("progress-bar").style.width = "0%";
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
